@@ -8,8 +8,17 @@ export function blankReport(now=new Date()){
  const pad=x=>String(x).padStart(2,'0'),date=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
  return Object.assign(Object.fromEntries(fields.map(k=>[k,''])),{reference:'FR-'+date.replaceAll('-','')+'-'+pad(now.getHours())+pad(now.getMinutes()),date,outcome:'resolved',parts:[],tested:false,briefed:false,clean:false,isSample:false});
 }
-export function sampleReport(now=new Date()){
- return {...blankReport(now),isSample:true,customer:'Northside Studio',location:'Montréal, QC',device:'Konica Minolta bizhub C360i',serial:'DEMO-0360',technician:'Alireza Rajabi',counter:'160280',issue:'Intermittent paper misfeeds from tray 2.',diagnosis:'Feed rollers showed visible wear. The paper guides did not match the loaded stock.',work:'Cleaned the pickup area and replaced the worn feed rollers. Adjusted the paper guides to the loaded stock.\nCompleted a 50-page feed test with no misfeeds.',parts:[{name:'Feed roller kit',reference:'',quantity:'1'},{name:'Cleaning materials',reference:'',quantity:'1'}],labor:'1.5',travel:'30',outcome:'resolved',next:'Use consistent paper stock and check the tray guides when reloading.',tested:true,briefed:true,clean:true,representative:'Jamie Morgan'};
+export function sampleReport(now=new Date(),lang='en'){
+ const report={...blankReport(now),isSample:true,customer:'Northside Studio',location:'Montréal, QC',device:'Konica Minolta bizhub C360i',serial:'DEMO-0360',technician:'Alireza Rajabi',counter:'160280',issue:'Intermittent paper misfeeds from tray 2.',diagnosis:'Feed rollers showed visible wear. The paper guides did not match the loaded stock.',work:'Cleaned the pickup area and replaced the worn feed rollers. Adjusted the paper guides to the loaded stock.\nCompleted a 50-page feed test with no misfeeds.',parts:[{name:'Feed roller kit',reference:'',quantity:'1'},{name:'Cleaning materials',reference:'',quantity:'1'}],labor:'1.5',travel:'30',outcome:'resolved',next:'Use consistent paper stock and check the tray guides when reloading.',tested:true,briefed:true,clean:true,representative:'Jamie Morgan'};
+ if(lang==='fa')Object.assign(report,{customer:'استودیوی آفتاب',location:'مونترآل، کبک',device:'کونیکا مینولتا بیزهاب C360i',serial:'نمونه-۰۳۶۰',technician:'علیرضا رجبی',issue:'کاغذ از سینی دوم گاهی درست تغذیه نمی‌شود.',diagnosis:'غلطک‌های کاغذکش فرسوده بودند و راهنماهای سینی با اندازهٔ کاغذ مطابقت نداشتند.',work:'بخش کاغذکش تمیز و غلطک‌های فرسوده تعویض شدند. راهنماهای سینی با اندازهٔ کاغذ تنظیم شدند.\nتست تغذیه با ۵۰ برگ انجام شد و گیرکردن کاغذ مشاهده نشد.',parts:[{name:'کیت غلطک کاغذکش',reference:'',quantity:'1'},{name:'مواد تمیزکننده',reference:'',quantity:'1'}],next:'از کاغذ یکنواخت استفاده شود و هنگام بارگذاری، راهنماهای سینی بررسی شوند.',representative:'آرش مرادی'});
+ return report;
+}
+export function localizeSample(report,lang){
+ if(!report.isSample)return report;
+ const en=sampleReport(),fa=sampleReport(new Date(),'fa'),target=lang==='fa'?fa:en,result={...report};
+ for(const field of ['customer','location','device','serial','technician','issue','diagnosis','work','next','representative'])if(report[field]===en[field]||report[field]===fa[field])result[field]=target[field];
+ result.parts=report.parts.map(part=>{const i=en.parts.findIndex((p,n)=>part.name===p.name||part.name===fa.parts[n].name);return i<0?{...part}:{...part,name:target.parts[i].name};});
+ return result;
 }
 export function validate(report){
  const errors=[];

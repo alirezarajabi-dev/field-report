@@ -19,7 +19,8 @@ without an account, a backend or a subscription.
 4. **Handover** — outcome, next steps and completion checks.
 
 The report updates while typing. English and Farsi include appropriate LTR/RTL
-layout, with a separate preview on smaller screens. Required-field validation
+layout, a fully localized example, and a Persian (Solar Hijri) date picker in Farsi.
+A separate preview is available on smaller screens. Required-field validation
 helps keep incomplete reports out of the print flow.
 
 ## Small by design
@@ -55,7 +56,8 @@ Run the tests:
 npm test
 ```
 
-Tests cover draft round trips, import validation, Persian/Arabic digits, dates,
+Tests cover draft round trips, import validation, Persian/Arabic digits, Nowruz,
+leap-year Esfand, calendar navigation, date round trips, preservation of edited notes,
 part quantities and escaping user-entered text. They use Node's built-in test
 runner; no test packages are required.
 
