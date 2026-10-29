@@ -1,0 +1,17 @@
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.dirname(fileURLToPath(import.meta.url)),port=8862;
+const files=new Map([['/','index.html'],['/index.html','index.html'],['/styles.css','styles.css'],['/app.js','app.js'],['/report-model.js','report-model.js'],['/fonts/vazirmatn-arabic.woff2','fonts/vazirmatn-arabic.woff2'],['/fonts/caveat-about.ttf','fonts/caveat-about.ttf']]);
+const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'text/javascript; charset=utf-8','.woff2':'font/woff2','.ttf':'font/ttf'};
+function review(mode,lang){const [w,h]=mode==='mobile'?[390,844]:mode==='tablet'?[768,1024]:[1366,900];return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Field Report · ${mode} preview</title><style>*{box-sizing:border-box}body{margin:0;background:#071321;color:#b3cbd9;font:12px/1.5 system-ui,sans-serif}nav{height:54px;display:flex;align-items:center;justify-content:center;gap:24px}a{color:#b3cbd9;text-decoration:none;padding:9px 0}a.active{color:#febf17;border-bottom:2px solid #febf17}small{color:#7a98ac}#stage{position:relative;direction:ltr;margin:0 auto;border:1px solid #355267;border-radius:8px;overflow:hidden}iframe{position:absolute;left:0;top:0;right:auto;bottom:auto;transform-origin:top left;border:0;width:${w}px;height:${h}px}</style><nav>${['desktop','tablet','mobile'].map(x=>`<a class="${mode===x?'active':''}" href="/review/${x}">${x[0].toUpperCase()+x.slice(1)}</a>`).join('')}<small>LOCAL PREVIEW</small></nav><div id="stage"><iframe id="screen" src="/?lang=${lang}" title="Field Report ${w}px preview"></iframe></div><script>const stage=document.getElementById('stage'),frame=document.getElementById('screen');function fit(){const scale=Math.min(1,(innerWidth-24)/${w},(innerHeight-70)/${h});stage.style.width=(${w}*scale)+'px';stage.style.height=(${h}*scale)+'px';frame.style.transform='scale('+scale+')';}addEventListener('resize',fit);fit();</script></html>`;}
+const server=http.createServer((req,res)=>{
+ res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
+ if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);return res.end('Read-only local preview');}
+ const url=new URL(req.url,'http://127.0.0.1:'+port),mode=url.pathname.match(/^\/review\/(desktop|tablet|mobile)$/)?.[1];
+ if(mode){res.setHeader('Content-Type',types['.html']);return res.end(req.method==='HEAD'?undefined:review(mode,url.searchParams.get('lang')==='fa'?'fa':'en'));}
+ const filename=files.get(url.pathname);if(!filename){res.writeHead(404);return res.end('Not found');}
+ try{const data=fs.readFileSync(path.join(root,filename));res.setHeader('Content-Type',types[path.extname(filename)]);res.end(req.method==='HEAD'?undefined:data);}catch{res.writeHead(404);res.end('Not found');}
+});
+server.listen(port,'127.0.0.1',()=>console.log(`Field Report local preview: http://127.0.0.1:${port}/ — desktop /review/desktop — mobile /review/mobile`));

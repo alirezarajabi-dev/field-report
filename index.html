@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Field Report — Alireza Rajabi</title>
+<meta name="description" content="Turn a service visit into a clear, professional report. A lightweight tool by Alireza Rajabi.">
+<meta name="robots" content="index,follow"><meta name="theme-color" content="#0c1b2e">
+<link rel="stylesheet" href="styles.css"><script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip" href="#editor" data-i="skip">Skip to report editor</a>
+<header class="app-header"><div class="header-inner">
+  <a class="brand" href="./" aria-label="Field Report home"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65"><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3M9 2h6v5H9zM8 12h8M8 16h5"/></svg></span><span><strong>Field<span>Report</span></strong><small data-i="brandNote">A little order, after a good day’s work.</small></span></a>
+  <div class="header-tools"><span id="save-status" class="save-status" role="status"></span><label class="sr-only" for="language" data-i="language">Language</label><select id="language"><option value="en">English</option><option value="fa">فارسی</option></select></div>
+</div></header>
+<main class="workspace">
+  <section class="workspace-intro"><div><p class="eyebrow" data-i="eyebrow">FROM THE FIELD. FOR THE RECORD.</p><h1 data-i="title">Good work. <em>Clearly recorded.</em></h1><p class="intro-text" data-i="intro">Capture the visit while the details are fresh. Leave a report that speaks for your work.</p></div><div class="intro-actions"><button type="button" class="quiet-button" id="sample-button" data-i="sample">Load example</button><button type="button" class="outline-button" id="new-button"><span aria-hidden="true">+</span><span data-i="new">New report</span></button></div></section>
+  <div class="mobile-switch" aria-label="Workspace view"><button type="button" id="edit-view" class="active" data-i="edit">Edit report</button><button type="button" id="preview-view" data-i="preview">Preview</button></div>
+  <div class="work-grid">
+  <section class="editor" id="editor" aria-labelledby="editor-heading">
+    <div class="editor-top"><div><p class="eyebrow" data-i="details">THE VISIT DETAILS</p><h2 id="editor-heading" data-i="editorTitle">Start with the essentials.</h2></div><span class="step-meta"><span id="sample-label" class="sample-label" data-i="sampleDraft" hidden>Example draft</span><span class="step-count" id="step-count"></span></span></div>
+    <nav class="steps" aria-label="Report sections">
+      <button type="button" data-step="0" class="active"><span>01</span><b data-i="visit">Visit</b></button>
+      <button type="button" data-step="1"><span>02</span><b data-i="findings">Findings</b></button>
+      <button type="button" data-step="2"><span>03</span><b data-i="partsTime">Parts & time</b></button>
+      <button type="button" data-step="3"><span>04</span><b data-i="handover">Handover</b></button>
+    </nav>
+    <form id="report-form" novalidate>
+      <div class="form-panel" data-panel="0">
+        <div class="field-grid"><label><span data-i="reportNumber">Report reference</span><input name="reference" maxlength="60" dir="ltr" autocomplete="off"></label><label><span data-i="date">Visit date</span><input name="date" type="date" required></label></div>
+        <label><span data-i="customer">Customer / company</span><span class="required">*</span><input dir="auto" name="customer" maxlength="180" required autocomplete="organization" data-placeholder="customerPlaceholder"></label>
+        <label><span data-i="location">Service location</span><input dir="auto" name="location" maxlength="220" autocomplete="street-address" data-placeholder="locationPlaceholder"></label>
+        <div class="field-grid"><label><span data-i="device">Device / model</span><span class="required">*</span><input dir="auto" name="device" maxlength="180" required data-placeholder="devicePlaceholder"></label><label><span data-i="serial">Serial / asset number</span><input name="serial" maxlength="100" dir="ltr" data-placeholder="optional"></label></div>
+        <div class="field-grid"><label><span data-i="technician">Technician</span><span class="required">*</span><input dir="auto" name="technician" required maxlength="180" autocomplete="name"></label><label><span data-i="counter">Meter reading</span><input name="counter" inputmode="numeric" maxlength="20" dir="ltr" data-placeholder="optional"></label></div>
+      </div>
+      <div class="form-panel" data-panel="1" hidden>
+        <label><span data-i="issue">Reported issue</span><textarea dir="auto" name="issue" rows="3" maxlength="3000" data-placeholder="issuePlaceholder"></textarea></label>
+        <label><span data-i="diagnosis">Findings / diagnosis</span><textarea dir="auto" name="diagnosis" rows="3" maxlength="3000" data-placeholder="diagnosisPlaceholder"></textarea></label>
+        <label><span data-i="work">Work completed</span><span class="required">*</span><textarea dir="auto" name="work" rows="4" maxlength="5000" required data-placeholder="workPlaceholder"></textarea></label>
+        <p class="field-hint" data-i="workHint">Keep it factual: what you found, what you did, and how you checked it.</p>
+      </div>
+      <div class="form-panel" data-panel="2" hidden>
+        <div class="section-label-row"><h3 data-i="parts">Parts & materials</h3><button type="button" class="text-button" id="add-part"><span aria-hidden="true">+</span> <span data-i="addPart">Add item</span></button></div>
+        <p class="field-hint" data-i="partsHint">Record what was actually used. Leave this empty if no parts were needed.</p>
+        <div id="parts-editor"></div>
+        <div class="time-fields field-grid"><label><span data-i="labor">Time on site (hours)</span><input name="labor" inputmode="decimal" dir="ltr" maxlength="8"></label><label><span data-i="travel">Travel time (minutes)</span><input name="travel" inputmode="numeric" dir="ltr" maxlength="8"></label></div>
+      </div>
+      <div class="form-panel" data-panel="3" hidden>
+        <label><span data-i="outcome">Visit outcome</span><select name="outcome"><option value="resolved" data-i="resolved">Resolved</option><option value="followup" data-i="followup">Follow-up required</option><option value="parts" data-i="awaiting">Awaiting parts</option></select></label>
+        <label><span data-i="next">Recommendations / next steps</span><textarea dir="auto" name="next" rows="3" maxlength="3000" data-placeholder="nextPlaceholder"></textarea></label>
+        <fieldset class="handover-checks"><legend data-i="beforeLeaving">Before leaving</legend><label><input name="tested" type="checkbox"><span data-i="tested">Device tested after service</span></label><label><input name="briefed" type="checkbox"><span data-i="briefed">Customer briefed on the work</span></label><label><input name="clean" type="checkbox"><span data-i="clean">Work area left clean</span></label></fieldset>
+        <label><span data-i="representative">Customer representative</span><input dir="auto" name="representative" maxlength="180" data-placeholder="optional"></label>
+      </div>
+      <div class="form-navigation"><button type="button" id="back-step" class="quiet-button" data-i="back">Back</button><span id="required-note" data-i="required">* Required for the final report</span><button type="button" id="next-step" class="gold-button" data-i="continue">Continue</button></div>
+    </form>
+    <div class="draft-tools"><span data-i="draftNote">Your draft stays in this browser.</span><div><button type="button" class="text-button" id="export-button" data-i="saveFile">Save draft file</button><button type="button" class="text-button" id="import-button" data-i="openFile">Open draft file</button><input type="file" id="import-file" accept=".json,application/json" hidden></div></div>
+  </section>
+  <section class="preview-area" aria-labelledby="preview-heading">
+    <div class="preview-toolbar"><div><span class="preview-dot" aria-hidden="true"></span><h2 id="preview-heading" data-i="livePreview">Your report, as it will look</h2></div><button type="button" id="print-button" class="gold-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7 8V3h10v5M7 17H4V9h16v8h-3M7 14h10v7H7zM16 11h1"/></svg><span data-i="print">Print / Save PDF</span></button></div>
+    <div class="paper-mat"><article class="report-paper" id="report-paper" aria-label="Service report preview"></article></div>
+    <p class="preview-footnote" data-i="printHint">Save as PDF from your browser’s print window. Your report stays open here.</p>
+    <button type="button" id="return-edit" class="outline-button" data-i="backEdit">Back to editing</button>
+  </section>
+  </div>
+  <footer class="app-footer"><p><span data-i="designed">Designed by</span> <strong data-i="author">Alireza Rajabi</strong></p><span data-i="footer">Less paperwork. A clearer record.</span></footer>
+</main>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<dialog id="replace-dialog" aria-labelledby="replace-title"><form method="dialog"><span class="dialog-mark" aria-hidden="true">↺</span><h2 id="replace-title"></h2><p data-i="replaceHint">This replaces the current draft in this browser. Save a draft file first if you want to keep it.</p><div class="dialog-actions"><button value="cancel" class="outline-button" data-i="cancel">Cancel</button><button value="confirm" class="gold-button" data-i="proceed">Continue</button></div></form></dialog>
+</body></html>

@@ -1,0 +1,11 @@
+{
+  "name": "field-report",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A lightweight, local-first service report builder by Alireza Rajabi.",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node tests/report.test.mjs"
+  }
+}
