@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/bk-forms-512.png" alt="BK Forms app icon" width="96" height="96"></p>
+
 # Field Report
 
 **Good work. Clearly recorded.**
@@ -36,6 +38,19 @@ helps keep incomplete reports out of the print flow.
 
 The navy, gold and teal palette follows the visual language of my Bizkonic
 project. Field Report is a separate application.
+
+## Add to your home screen
+
+The dedicated **BK Forms** icon includes both BK and Forms inside the image.
+The installed app is named **Field Report**. On iPhone, use Safari → Share →
+Add to Home Screen. An older shortcut may keep its cached icon; remove that
+shortcut and add it again from the live app. Save any important draft as a JSON
+file before removing a standalone installation. Browser installation support varies;
+there is no offline cache or cloud sync.
+
+The [assets folder](assets/) includes the approved SVG and PNG exports for Apple
+(180px), regular icons (192px and 512px), and maskable installation (512px).
+These assets are separate from the main Bizkonic and Command Desk logos.
 
 ## Run locally
 
